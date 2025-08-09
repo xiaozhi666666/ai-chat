@@ -50,10 +50,10 @@ npm run build
 src/
 ├── components/          # React 组件
 │   └── ChatApp.tsx     # 主聊天组件
-├── services/           # API 服务
-│   └── aiService.ts    # AI 服务接入
+├── services/           # GraphQL 服务
+│   └── graphqlService.ts  # GraphQL 客户端
 ├── styles/             # 样式文件
-│   └── index.css       # 主样式
+│   └── index.less      # 主样式 (Less)
 ├── types/              # TypeScript 类型定义
 │   └── index.ts        # 类型定义
 ├── App.tsx             # 应用入口组件
@@ -74,4 +74,12 @@ src/
 
 ⚠️ **API Key 安全**：请不要在客户端代码中硬编码 API Key。建议使用环境变量或后端代理。
 
-⚠️ **CORS 问题**：直接从浏览器调用 AI API 可能遇到 CORS 限制，建议部署后端代理服务。
+## 架构说明
+
+本项目采用 **GraphQL + Cloudflare Workers** 架构：
+
+- **前端**：React + TypeScript + Apollo Client
+- **后端**：Cloudflare Workers + GraphQL Yoga
+- **AI 集成**：通过 Workers 代理 OpenAI 和 DeepSeek API
+
+这种架构解决了 CORS 问题，提供更好的安全性和性能。
