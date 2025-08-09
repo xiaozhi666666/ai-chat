@@ -4,8 +4,8 @@ import { setContext } from '@apollo/client/link/context';
 // GraphQL endpoint - 替换为您的 Cloudflare Worker URL
 const GRAPHQL_ENDPOINT = process.env.NODE_ENV === 'development' 
   ? 'http://localhost:8787/graphql'  // 本地开发
-  : 'https://ai-chat-api.your-subdomain.workers.dev/graphql'; // 生产环境
-
+  : 'https://ai-chat-workers.xiaozhi66666696.workers.dev'; // 生产环境
+  
 const httpLink = createHttpLink({
   uri: GRAPHQL_ENDPOINT,
 });
