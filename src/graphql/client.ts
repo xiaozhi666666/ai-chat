@@ -8,6 +8,9 @@ const GRAPHQL_ENDPOINT = process.env.NODE_ENV === 'development'
   
 const httpLink = createHttpLink({
   uri: GRAPHQL_ENDPOINT,
+  fetchOptions: {
+    mode: 'cors',
+  },
 });
 
 const authLink = setContext((_, { headers }) => {
