@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { Message } from '../types';
 import { graphqlService } from '../services/graphqlService';
 
@@ -245,7 +248,32 @@ const ChatApp: React.FC = () => {
           messages.map((message) => (
             <div key={message.id} className={`message ${message.role}`}>
               <div className="message-content">
-                <div className="message-text">{message.content}</div>
+                <div className="message-text">
+                  {message.role === 'assistant' ? (
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeHighlight]}
+                      components={{
+                        code: ({ node, inline, className, children, ...props }: any) => {
+                          const match = /language-(\w+)/.exec(className || '');
+                          return !inline && match ? (
+                            <pre className={className}>
+                              <code className={className}>{children}</code>
+                            </pre>
+                          ) : (
+                            <code className={className}>
+                              {children}
+                            </code>
+                          );
+                        }
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  ) : (
+                    message.content
+                  )}
+                </div>
                 <div className="message-time">
                   {message.timestamp.toLocaleTimeString()}
                 </div>
