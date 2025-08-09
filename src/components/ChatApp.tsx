@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Message, ChatConfig } from '../types';
-import { sendMessage } from '../services/aiService';
+import { Message } from '../types';
+import { graphqlService } from '../services/graphqlService';
 
 const ChatApp: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -62,19 +62,28 @@ const ChatApp: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const config: ChatConfig = {
-        provider: currentProvider,
-        apiKey: currentApiKey,
-        model: currentProvider === 'openai' ? 'gpt-3.5-turbo' : 'deepseek-chat'
-      };
+      const provider = currentProvider.toUpperCase() as 'OPENAI' | 'DEEPSEEK';
+      const model = currentProvider === 'openai' ? 'gpt-3.5-turbo' : 'deepseek-chat';
       
-      const response = await sendMessage(inputValue, config);
+      // 构建对话历史
+      const conversationHistory = messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+      
+      const response = await graphqlService.sendMessage(
+        inputValue,
+        provider,
+        currentApiKey,
+        model,
+        conversationHistory
+      );
       
       const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: response.id,
         role: 'assistant',
         content: response.content,
-        timestamp: new Date()
+        timestamp: new Date(response.timestamp)
       };
 
       setMessages(prev => [...prev, assistantMessage]);

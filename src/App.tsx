@@ -1,11 +1,15 @@
 import React from 'react';
+import { ApolloProvider } from '@apollo/client';
+import { apolloClient } from './graphql/client';
 import ChatApp from './components/ChatApp';
 
 const App: React.FC = () => {
   return (
-    <div className="app">
-      <ChatApp />
-    </div>
+    <ApolloProvider client={apolloClient}>
+      <div className="app">
+        <ChatApp />
+      </div>
+    </ApolloProvider>
   );
 };
 
