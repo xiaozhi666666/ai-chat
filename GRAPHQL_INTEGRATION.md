@@ -39,8 +39,6 @@
 ### 1. 部署 Cloudflare Workers
 
 ```bash
-# 进入 Workers 目录
-cd workers/ai-chat-api
 
 # 安装依赖
 npm install
